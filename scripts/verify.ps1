@@ -65,3 +65,9 @@ swiftc -sdk $swiftSdk.FullName src/Core.swift src/DomainReview.swift tests/Test.
 ./build/test.exe
 
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/check-axiom-store-planner-detail.ps1
+
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/check-axiom-store-planner-properties.ps1
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/check-axiom-store-planner-golden.ps1
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

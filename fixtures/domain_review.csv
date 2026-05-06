@@ -1,0 +1,6 @@
+name,focus,signal,slack,drag,confidence,score,lane
+baseline,index fit,43,25,10,56,137,watch
+stress,join width,48,35,30,72,113,watch
+edge,constraint risk,77,47,27,89,209,ship
+recovery,plan drift,83,30,23,68,195,ship
+stale,index fit,61,53,14,75,208,ship

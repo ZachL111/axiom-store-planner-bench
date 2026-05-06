@@ -1,68 +1,40 @@
 # axiom-store-planner-bench
 
-`axiom-store-planner-bench` treats databases as a local verification problem. The Swift implementation is intentionally narrow, but the fixtures and notes make the behavior explicit.
+`axiom-store-planner-bench` is a Swift project in databases. Its focus is to develop a Swift command-oriented project for planner scenarios with bounded scenario files, conflict explanations, and no network dependency.
 
-## Axiom Store Planner Bench Checkpoints
+## Purpose
 
-Treat the compact fixture as the contract and the extended examples as a scratchpad. The code should stay boring enough that a change in behavior is obvious from the test output.
+The project exists to keep a narrow engineering decision visible and testable. For this repo, that decision is how index fit and constraint risk should influence a review result.
 
-## What This Is For
+## Axiom Store Planner Bench Review Notes
 
-I use this kind of project to make a rule visible before adding more machinery around it. The important part here is not the size of the codebase. It is that the input signals, scoring rule, fixture data, and expected output can all be checked in one sitting.
+`edge` and `stress` are the cases worth reading first. They show the optimistic and cautious ends of the fixture.
 
-## Case Study
+## What Is Covered
 
-The examples are meant to be readable before they are exhaustive. They cover enough variation to show how latency and risk can pull a decision below the threshold.
+- `fixtures/domain_review.csv` adds cases for index fit and join width.
+- `metadata/domain-review.json` records the same cases in structured form.
+- `config/review-profile.json` captures the read order and the two review questions.
+- `examples/axiom-store-planner-walkthrough.md` walks through the case spread.
+- The Swift code includes a review path for `constraint risk` and `join width`.
+- `docs/field-notes.md` explains the strongest and weakest cases.
 
-## Architecture Notes
+## Implementation Notes
 
-The project is organized around a compact model rather than a large framework. Inputs are scored, classified, and checked against golden fixtures. The constants live in code and are mirrored in metadata so documentation drift is easy to catch. The Swift project compiles a minimal command-line test harness against the local Windows SDK.
+The repository has two validation layers: the original compact policy fixture and the domain review fixture. They are separate so one can change without hiding failures in the other.
 
-## Useful Pieces
+The Swift addition stays small enough to inspect in one sitting.
 
-- Models schema shape with deterministic scoring and explicit review decisions.
-- Uses fixture data to keep query checks changes visible in code review.
-- Includes extended examples for fixture rows, including `surge` and `degraded`.
-- Documents constraint behavior tradeoffs in `docs/operations.md`.
-- Runs locally with a single verification command and no external credentials.
-
-## Local Workflow
+## Command
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify.ps1
 ```
 
-This runs the language-level build or test path against the compact fixture set.
+## Audit Path
 
-## Quality Gate
+The check exercises the source code and the review fixture. `edge` is the high score at 209; `stress` is the low score at 113.
 
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/audit.ps1
-```
+## Limits
 
-The audit command checks repository structure and README constraints before it delegates to the verifier.
-
-## Project Layout
-
-- `src`: primary implementation
-- `tests`: verification harness
-- `fixtures`: compact golden scenarios
-- `examples`: expanded scenario set
-- `metadata`: project constants and verification metadata
-- `docs`: operations and extension notes
-- `scripts`: local verification and audit commands
-
-## Expansion Ideas
-
-- Add a loader for `examples/extended_cases.csv` and promote selected cases into the language test suite.
-- Add a short report command that prints the score breakdown for a single scenario.
-- Add malformed input fixtures so the failure path is as visible as the happy path.
-- Add one more databases fixture that focuses on a malformed or borderline input.
-
-## Scope
-
-The fixture set is deliberately small. That keeps the review surface clear, but it also means the model should not be treated as a complete domain simulator.
-
-## Tooling
-
-Install Swift and run the commands from the repository root. The project does not need credentials or a hosted service.
+The fixture set is small enough to audit by hand. The next useful expansion is malformed input coverage, not extra surface area.
